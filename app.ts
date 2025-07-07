@@ -13,21 +13,37 @@ const list = document.getElementById("taskList") as HTMLUListElement;
 
 function renderTasks(): void {
   list.innerHTML = "";
+
   tasks.forEach((task) => {
     const li = document.createElement("li");
-    li.textContent = task.title;
-    if (task.completed) {
-      li.style.textDecoration = "line-through";
-    }
 
-    li.addEventListener("click", () => {
+    // Заголовок задачи
+    const taskText = document.createElement("span");
+    taskText.textContent = task.title;
+    if (task.completed) {
+      taskText.style.textDecoration = "line-through";
+    }
+    taskText.style.cursor = "pointer";
+    taskText.addEventListener("click", () => {
       task.completed = !task.completed;
       renderTasks();
     });
 
+    // Кнопка удаления
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "❌";
+    deleteBtn.style.marginLeft = "10px";
+    deleteBtn.addEventListener("click", () => {
+      tasks = tasks.filter((t) => t.id !== task.id);
+      renderTasks();
+    });
+
+    li.appendChild(taskText);
+    li.appendChild(deleteBtn);
     list.appendChild(li);
   });
 }
+
 
 form.addEventListener("submit", (e: Event) => {
   e.preventDefault();
