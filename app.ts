@@ -35,6 +35,7 @@ function renderTasks(): void {
     deleteBtn.style.marginLeft = "10px";
     deleteBtn.addEventListener("click", () => {
       tasks = tasks.filter((t) => t.id !== task.id);
+      saveToLocalStorage();
       renderTasks();
     });
 
@@ -55,6 +56,20 @@ form.addEventListener("submit", (e: Event) => {
   };
 
   tasks.push(newTask);
+  saveToLocalStorage();
   input.value = "";
   renderTasks();
 });
+
+function saveToLocalStorage(): void {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+window.addEventListener("load", () => {
+  const saved = localStorage.getItem("tasks");
+  if (saved) {
+    tasks = JSON.parse(saved);
+    renderTasks();
+  }
+});
+

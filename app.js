@@ -23,6 +23,7 @@ function renderTasks() {
         deleteBtn.style.marginLeft = "10px";
         deleteBtn.addEventListener("click", function () {
             tasks = tasks.filter(function (t) { return t.id !== task.id; });
+            saveToLocalStorage();
             renderTasks();
         });
         li.appendChild(taskText);
@@ -38,6 +39,17 @@ form.addEventListener("submit", function (e) {
         completed: false,
     };
     tasks.push(newTask);
+    saveToLocalStorage();
     input.value = "";
     renderTasks();
+});
+function saveToLocalStorage() {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+window.addEventListener("load", function () {
+    var saved = localStorage.getItem("tasks");
+    if (saved) {
+        tasks = JSON.parse(saved);
+        renderTasks();
+    }
 });
